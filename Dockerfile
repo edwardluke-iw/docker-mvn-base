@@ -19,7 +19,7 @@ COPY --from=mvn stage_015.mvn stage_015.mvn
 COPY --from=mvn /usr/share/maven /usr/share/maven
 ENTRYPOINT [ "/usr/share/maven/bin/mvn" ]
 
-FROM edwardlukeiw/jvm:openjdk11 as mvn-graaljdk11
+FROM edwardlukeiw/jvm:graaljdk11 as mvn-graaljdk11
 RUN touch stage_020.mvn-graaljdk11
 COPY --from=mvn stage_015.mvn stage_015.mvn
 COPY --from=mvn /usr/share/maven /usr/share/maven
