@@ -7,8 +7,6 @@ RUN apk add --no-cache curl tar bash && \
     mkdir -p /usr/share/maven && \
     curl -fsSL http://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzC /usr/share/maven --strip-components=1
 
-# Create a symlink to the maven executable
-RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 # Add a marker file for debugging purposes
 RUN touch stage_015.mvn
 
@@ -19,7 +17,8 @@ RUN touch stage_020.mvn-openjdk8
 COPY --from=mvn stage_015.mvn stage_015.mvn
 # Copy the maven install from the previous stage
 COPY --from=mvn /usr/share/maven /usr/share/maven
-COPY --from=mvn /usr/bin/mvn /usr/bin/mvn
+# Create a symlink to the maven executable
+RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 FROM edwardlukeiw/jvm:openjdk11 as mvn-openjdk11
 # Add a marker file for debugging purposes
@@ -28,7 +27,8 @@ RUN touch stage_020.mvn-openjdk11
 COPY --from=mvn stage_015.mvn stage_015.mvn
 # Copy the maven install from the previous stage
 COPY --from=mvn /usr/share/maven /usr/share/maven
-COPY --from=mvn /usr/bin/mvn /usr/bin/mvn
+# Create a symlink to the maven executable
+RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 FROM edwardlukeiw/jvm:graaljdk11 as mvn-graaljdk11
 # Add a marker file for debugging purposes
@@ -37,4 +37,5 @@ RUN touch stage_020.mvn-graaljdk11
 COPY --from=mvn stage_015.mvn stage_015.mvn
 # Copy the maven install from the previous stage
 COPY --from=mvn /usr/share/maven /usr/share/maven
-COPY --from=mvn /usr/bin/mvn /usr/bin/mvn
+# Create a symlink to the maven executable
+RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
